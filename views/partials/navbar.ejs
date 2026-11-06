@@ -1,0 +1,20 @@
+<header class="site-header">
+  <nav class="navbar">
+    <a href="/" class="brand">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">Vault</span>
+    </a>
+
+    <div class="nav-links">
+      <% if (user) { %>
+        <a href="/" class="nav-link">My files</a>
+        <form action="/logout" method="POST">
+          <button type="submit" class="nav-link nav-logout">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/login" class="nav-link">Log in</a>
+        <a href="/signup" class="nav-button">Create account</a>
+      <% } %>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,94 @@
+.site-header {
+  width: 100%;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar {
+  width: min(1240px, calc(100% - 64px));
+  min-height: 76px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-links form {
+  display: flex;
+}
+
+.nav-link {
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+.nav-button {
+  padding: 10px 17px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.nav-button:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    width: calc(100% - 36px);
+    min-height: 68px;
+  }
+
+  .nav-links {
+    gap: 17px;
+  }
+
+  .brand-name {
+    font-size: 18px;
+  }
+}

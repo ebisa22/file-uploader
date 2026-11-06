@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Home', cssPath: 'home.css' }) %>
+
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="landing-page">
+      <section class="hero">
+        <div class="hero-content">
+          <span class="hero-label">
+            <icon-placeholder></icon-placeholder>
+            YOUR PERSONAL FILE SPACE
+          </span>
+
+          <h1>
+            Everything you need.
+            <span>Safely in one place.</span>
+          </h1>
+
+          <p class="hero-description">
+            Keep your important files organized, accessible, and secure.
+            Upload documents, create folders, and access your files whenever
+            you need them.
+          </p>
+
+          <div class="hero-actions">
+            <a href="/signup" class="button button-primary">
+              Get started <span>→</span>
+            </a>
+            <a href="/login" class="button button-secondary">
+              Sign in
+            </a>
+          </div>
+
+          <p class="hero-note">
+            A simple, organized space for everything that matters.
+          </p>
+        </div>
+
+        <div class="hero-visual">
+          <div class="visual-window">
+            <div class="visual-topbar">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="visual-title">Your workspace</span>
+              <span class="visual-status">
+                <span></span> Organized
+              </span>
+            </div>
+
+            <div class="visual-body">
+              <div class="visual-sidebar">
+                <div class="sidebar-brand">
+                  <span class="sidebar-brand-icon">V</span>
+                  <span>Vault</span>
+                </div>
+                <div class="sidebar-link active">
+                  <span>▦</span> My files
+                </div>
+                <div class="sidebar-link">
+                  <span>▰</span> Folders
+                </div>
+                <div class="sidebar-link">
+                  <span>↗</span> Shared
+                </div>
+              </div>
+
+              <div class="visual-files">
+                <div class="visual-files-heading">
+                  <div>
+                    <p>YOUR SPACE</p>
+                    <h3>My files</h3>
+                  </div>
+                  <span class="visual-add">+</span>
+                </div>
+
+                <div class="visual-folder-grid">
+                  <div class="visual-folder">
+                    <span class="folder-symbol">▰</span>
+                    <strong>Documents</strong>
+                    <small>12 files</small>
+                  </div>
+                  <div class="visual-folder">
+                    <span class="folder-symbol">▰</span>
+                    <strong>Projects</strong>
+                    <small>8 files</small>
+                  </div>
+                  <div class="visual-folder">
+                    <span class="folder-symbol">▰</span>
+                    <strong>Personal</strong>
+                    <small>5 files</small>
+                  </div>
+                  <div class="visual-folder">
+                    <span class="folder-symbol">▰</span>
+                    <strong>Archives</strong>
+                    <small>3 files</small>
+                  </div>
+                </div>
+
+                <div class="visual-recent-heading">Recently uploaded</div>
+
+                <div class="visual-file-row">
+                  <span class="file-type pdf">PDF</span>
+                  <span class="visual-file-name">
+                    <strong>Project proposal.pdf</strong>
+                    <small>2.4 MB</small>
+                  </span>
+                  <span class="file-date">Today</span>
+                </div>
+
+                <div class="visual-file-row">
+                  <span class="file-type doc">DOC</span>
+                  <span class="visual-file-name">
+                    <strong>Meeting notes.docx</strong>
+                    <small>840 KB</small>
+                  </span>
+                  <span class="file-date">Yesterday</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="visual-decoration decoration-one"></div>
+          <div class="visual-decoration decoration-two"></div>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="features-heading">
+          <p class="eyebrow">BUILT FOR SIMPLICITY</p>
+          <h2>A better way to manage your files.</h2>
+          <p>
+            Everything you need to keep your digital workspace organized.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-item">
+            <div class="feature-icon">
+              <i data-lucide="folder-tree"></i>
+            </div>
+            <h3>Organized storage</h3>
+            <p>
+              Create folders and subfolders to keep your files structured
+              and easy to find.
+            </p>
+          </article>
+
+          <article class="feature-item">
+            <div class="feature-icon">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <h3>Private by default</h3>
+            <p>
+              Your personal files stay private, with control over what
+              you choose to share.
+            </p>
+          </article>
+
+          <article class="feature-item">
+            <div class="feature-icon">
+              <i data-lucide="share-2"></i>
+            </div>
+            <h3>Simple sharing</h3>
+            <p>
+              Share folders through links and control how long those
+              links remain accessible.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="closing-section">
+        <div>
+          <p class="eyebrow">YOUR FILES, YOUR SPACE</p>
+          <h2>Bring everything together.</h2>
+          <p>Start organizing your files with Vault.</p>
+        </div>
+        <a href="/signup" class="button button-light">
+          Create your account <span>→</span>
+        </a>
+      </section>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

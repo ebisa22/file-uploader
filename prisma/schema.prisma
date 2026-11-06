@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  firstName String 
+  lastName String
+  email String @unique
+  password String
+  securityQuestion String
+  securityAnswer   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  files File[]
+  folder Folder[]
+}
+
+model Folder{
+  id Int @id @default(autoincrement())
+  name String 
+  parent Folder? @relation("FolderHierarchy", fields: [parentId], references: [id],onDelete: Cascade)
+  parentId Int? 
+  children Folder[] @relation("FolderHierarchy")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  files File[]
+  sharedFolder SharedFolder[]
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+
+  @@index([userId])
+}
+
+model File{
+   id Int @id @default(autoincrement())
+   originalName String 
+   storedName String @unique 
+   mimeType String
+   size BigInt
+   storagePath String
+   user User @relation(fields: [userId], references: [id],onDelete: Cascade)
+   userId Int
+   folder Folder? @relation(fields: [folderId],references: [id],onDelete: Cascade)
+   folderId Int?
+   createdAt DateTime @default(now())
+   @@index([folderId,userId])
+}
+
+model SharedFolder {
+  id Int @id @default(autoincrement())
+  token String @unique
+  folder Folder @relation(fields: [folderId],references: [id],onDelete: Cascade)
+  folderId Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revokedAt DateTime ?
+   @@index([folderId])
+
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.Text
+  expiresAt   DateTime
+}

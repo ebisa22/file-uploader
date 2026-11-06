@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Create Account', cssPath: 'signup.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <% const formErrors = typeof errors !== 'undefined' ? errors : {}; %>
+    <% const formValues = typeof values !== 'undefined' ? values : {}; %>
+
+    <main class="signup-page">
+      <section class="signup-intro">
+        <div class="intro-content">
+          <span class="intro-label">YOUR PERSONAL FILE SPACE</span>
+          <h1>A place for everything <span>that matters.</span></h1>
+          <p>
+            Keep your important files organized, accessible, and secure.
+            Create your personal space and manage everything in one place.
+          </p>
+
+          <div class="intro-benefits">
+            <div class="benefit">
+              <span class="benefit-icon"><i data-lucide="folder-check"></i></span>
+              <div>
+                <h3>Stay organized</h3>
+                <p>Keep files structured with folders and subfolders.</p>
+              </div>
+            </div>
+
+            <div class="benefit">
+              <span class="benefit-icon"><i data-lucide="shield-check"></i></span>
+              <div>
+                <h3>Keep your files private</h3>
+                <p>Your files remain private unless you choose to share.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="signup-form-section">
+        <div class="signup-form-container">
+          <div class="form-heading">
+            <p class="form-eyebrow">GET STARTED</p>
+            <h2>Create your account</h2>
+            <p>Enter your details to get started with Vault.</p>
+          </div>
+
+          <form action="/signup" method="POST" class="signup-form">
+            <div class="name-fields">
+              <div class="form-group">
+                <label for="firstName">First name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First name"
+                  value="<%= formValues.firstName || '' %>"
+                  autocomplete="given-name"
+                  required
+                  class="<%= formErrors.firstName ? 'input-error' : '' %>"
+                >
+                <% if (formErrors.firstName) { %>
+                  <span class="field-error"><%= formErrors.firstName.msg %></span>
+                <% } %>
+              </div>
+
+              <div class="form-group">
+                <label for="lastName">Last name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Last name"
+                  value="<%= formValues.lastName || '' %>"
+                  autocomplete="family-name"
+                  required
+                  class="<%= formErrors.lastName ? 'input-error' : '' %>"
+                >
+                <% if (formErrors.lastName) { %>
+                  <span class="field-error"><%= formErrors.lastName.msg %></span>
+                <% } %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                value="<%= formValues.email || '' %>"
+                autocomplete="email"
+                required
+                class="<%= formErrors.email ? 'input-error' : '' %>"
+              >
+              <% if (formErrors.email) { %>
+                <span class="field-error"><%= formErrors.email.msg %></span>
+              <% } %>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                required
+                class="<%= formErrors.password ? 'input-error' : '' %>"
+              >
+              <% if (formErrors.password) { %>
+                <span class="field-error"><%= formErrors.password.msg %></span>
+              <% } %>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Re-enter your password"
+                autocomplete="new-password"
+                required
+                class="<%= formErrors.confirmPassword ? 'input-error' : '' %>"
+              >
+              <% if (formErrors.confirmPassword) { %>
+                <span class="field-error"><%= formErrors.confirmPassword.msg %></span>
+              <% } %>
+            </div>
+
+            <div class="security-section">
+              <div class="security-heading">
+                <span class="security-icon"><i data-lucide="shield-question"></i></span>
+                <div>
+                  <h3>Account recovery</h3>
+                  <p>Choose a security question to recover your account if you forget your password.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="securityQuestion">Security question</label>
+                <select
+                  id="securityQuestion"
+                  name="securityQuestion"
+                  required
+                  class="<%= formErrors.securityQuestion ? 'input-error' : '' %>"
+                >
+                  <option value="" disabled <%= !formValues.securityQuestion ? 'selected' : '' %>>
+                    Select a security question
+                  </option>
+                  <% securityQuestions.forEach(question => { %>
+                    <option
+                      value="<%= question %>"
+                      <%= formValues.securityQuestion === question ? 'selected' : '' %>
+                    >
+                      <%= question %>
+                    </option>
+                  <% }) %>
+                </select>
+                <% if (formErrors.securityQuestion) { %>
+                  <span class="field-error"><%= formErrors.securityQuestion.msg %></span>
+                <% } %>
+              </div>
+
+              <div class="form-group">
+                <label for="securityAnswer">Your answer</label>
+                <input
+                  type="text"
+                  id="securityAnswer"
+                  name="securityAnswer"
+                  placeholder="Enter your answer"
+                  autocomplete="off"
+                  required
+                  class="<%= formErrors.securityAnswer ? 'input-error' : '' %>"
+                >
+                <% if (formErrors.securityAnswer) { %>
+                  <span class="field-error"><%= formErrors.securityAnswer.msg %></span>
+                <% } %>
+              </div>
+            </div>
+
+            <button type="submit" class="signup-button">
+              Create account
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </form>
+
+          <p class="signin-prompt">
+            Already have an account? <a href="/login">Sign in</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+  </body>
+</html>
