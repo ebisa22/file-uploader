@@ -2,8 +2,6 @@ import { prisma } from "../lib/prisma.js";
 
 const getDashboardPage = async (req, res, next) => {
   const user = req.isAuthenticated() ? req.user : null;
-  console.log(user);
-  console.log("u got it here");
   if (!user) {
     return res.redirect("/login");
   }

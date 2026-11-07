@@ -36,10 +36,7 @@
             </div>
 
             <div class="storage-track">
-              <div
-                class="storage-progress"
-                style="width: <%= storagePercentage %>%"
-              ></div>
+                <div class="storage-progress-fill" style="--storage-used: <%= Number(storagePercentage) %>%;"></div>
             </div>
 
             <p><%= storagePercentage %>% of your storage used</p>

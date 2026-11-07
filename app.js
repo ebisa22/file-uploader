@@ -3,6 +3,9 @@ import path from 'node:path';
 import {session,passport} from './auth.js';
 import homeRouter from './routes/home.js';
 import dashboardRouter from './routes/dashboard.js';
+import foldersRouter from './routes/folders.js';
+import sharedRouter from './routes/shared.js';
+import accountRouter from './routes/account.js'
 import logoutRouter from './routes/logout.js'
 import 'dotenv/config';
 
@@ -23,6 +26,9 @@ app.use(passport.session())
 
 app.use('/',homeRouter);
 app.use('/dashboard',dashboardRouter);
+app.use('/folders',foldersRouter);
+app.use('/shared',sharedRouter);
+app.use('/account',accountRouter);
 app.use('/logout',logoutRouter);
 app.listen(PORT,(err)=>{
     if(err){

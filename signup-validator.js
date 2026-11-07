@@ -18,7 +18,7 @@ const checkUsernameAvailability = async (value) => {
             email:value
         }
     });
-    if (user) throw new Error("Username already exist");
+    if (user) throw new Error("Email already exist");
     else return true;
   } catch (err) {
     console.error(err);
@@ -51,7 +51,7 @@ const validationFields = [
     .withMessage("Enter valid email address")
     .bail()
     .custom(checkUsernameAvailability)
-    .withMessage("Username already registered"),
+    .withMessage("Email already registered"),
   body("password").isStrongPassword().withMessage("Enter strong password"),
   body("confirmPassword")
     .custom(checkConfirmPassword)

@@ -66,7 +66,6 @@ model SharedFolder {
   createdAt DateTime @default(now())
   revokedAt DateTime ?
    @@index([folderId])
-
 }
 
 model Session {

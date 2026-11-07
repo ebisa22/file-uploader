@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Account Settings', cssPath: 'account.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="account-page">
+      <div class="account-container">
+        <header class="page-heading">
+          <div>
+            <span class="eyebrow">YOUR ACCOUNT</span>
+            <h1>Account settings</h1>
+            <p>Manage your personal information, security, and storage.</p>
+          </div>
+        </header>
+
+        <div class="account-layout">
+          <aside class="account-navigation">
+            <a href="#profile" class="account-nav-link active">
+              <i data-lucide="user-round"></i>
+              Personal information
+            </a>
+            <a href="#password" class="account-nav-link">
+              <i data-lucide="lock"></i>
+              Password
+            </a>
+            <a href="#security" class="account-nav-link">
+              <i data-lucide="shield-check"></i>
+              Recovery security
+            </a>
+            <a href="#storage" class="account-nav-link">
+              <i data-lucide="hard-drive"></i>
+              Storage
+            </a>
+            <a href="#delete-account" class="account-nav-link danger-link">
+              <i data-lucide="trash-2"></i>
+              Delete account
+            </a>
+          </aside>
+
+          <div class="account-content">
+
+            <!-- Personal information -->
+            <section class="settings-section" id="profile">
+              <div class="section-heading">
+                <div>
+                  <h2>Personal information</h2>
+                  <p>Update the information associated with your account.</p>
+                </div>
+              </div>
+
+              <form action="/account/profile" method="POST" class="settings-form">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="firstName">First name</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value="<%= profileValues.firstName ?? user.firstName %>"
+                      placeholder="Your first name"
+                      required
+                    >
+                    <% if (profileErrors.firstName) { %>
+                      <span class="field-error"><%= profileErrors.firstName.msg %></span>
+                    <% } %>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lastName">Last name</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value="<%= profileValues.lastName ?? user.lastName %>"
+                      placeholder="Your last name"
+                      required
+                    >
+                    <% if (profileErrors.lastName) { %>
+                      <span class="field-error"><%= profileErrors.lastName.msg %></span>
+                    <% } %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="<%= profileValues.email ?? user.email %>"
+                    placeholder="you@example.com"
+                    required
+                  >
+                  <% if (profileErrors.email) { %>
+                    <span class="field-error"><%= profileErrors.email.msg %></span>
+                  <% } %>
+                </div>
+
+                <% if (profileErrors.general) { %>
+                  <p class="form-error"><%= profileErrors.general.msg %></p>
+                <% } %>
+
+                <div class="form-footer">
+                  <button type="submit" class="primary-button">Save changes</button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Change password -->
+            <section class="settings-section" id="password">
+              <div class="section-heading">
+                <div>
+                  <h2>Change password</h2>
+                  <p>Choose a strong password to protect your account.</p>
+                </div>
+              </div>
+
+              <form action="/account/password" method="POST" class="settings-form">
+                <div class="form-group">
+                  <label for="currentPassword">Current password</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    name="currentPassword"
+                    placeholder="Enter your current password"
+                    required
+                  >
+                  <% if (passwordErrors.currentPassword) { %>
+                    <span class="field-error"><%= passwordErrors.currentPassword.msg %></span>
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="newPassword">New password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    name="newPassword"
+                    placeholder="Enter a new password"
+                    required
+                  >
+                  <span class="field-hint">Use at least 8 characters, including uppercase, lowercase, a number, and a special character.</span>
+                  <% if (passwordErrors.newPassword) { %>
+                    <span class="field-error"><%= passwordErrors.newPassword.msg %></span>
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm new password</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Enter your new password again"
+                    required
+                  >
+                  <% if (passwordErrors.confirmPassword) { %>
+                    <span class="field-error"><%= passwordErrors.confirmPassword.msg %></span>
+                  <% } %>
+                </div>
+
+                <% if (passwordErrors.general) { %>
+                  <p class="form-error"><%= passwordErrors.general.msg %></p>
+                <% } %>
+
+                <div class="form-footer">
+                  <button type="submit" class="primary-button">Update password</button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Recovery security -->
+            <section class="settings-section" id="security">
+              <div class="section-heading">
+                <div>
+                  <h2>Recovery security</h2>
+                  <p>Manage the security question used for password recovery.</p>
+                </div>
+              </div>
+
+              <form action="/account/security" method="POST" class="settings-form">
+                <div class="form-group">
+                  <label for="securityCurrentPassword">Current password</label>
+                  <input
+                    type="password"
+                    id="securityCurrentPassword"
+                    name="currentPassword"
+                    placeholder="Confirm your current password"
+                    required
+                  >
+                  <% if (securityErrors.currentPassword) { %>
+                    <span class="field-error"><%= securityErrors.currentPassword.msg %></span>
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="securityQuestion">Security question</label>
+                  <select id="securityQuestion" name="securityQuestion" required>
+                    <option value="">Choose a security question</option>
+                    <% securityQuestions.forEach(question => { %>
+                      <option
+                        value="<%= question %>"
+                        <%= (securityValues.securityQuestion ?? user.securityQuestion) === question ? 'selected' : '' %>
+                      >
+                        <%= question %>
+                      </option>
+                    <% }) %>
+                  </select>
+                  <% if (securityErrors.securityQuestion) { %>
+                    <span class="field-error"><%= securityErrors.securityQuestion.msg %></span>
+                  <% } %>
+                </div>
+
+                <div class="form-group">
+                  <label for="securityAnswer">New security answer</label>
+                  <input
+                    type="password"
+                    id="securityAnswer"
+                    name="securityAnswer"
+                    placeholder="Enter your new security answer"
+                    required
+                  >
+                  <span class="field-hint">Your answer is stored securely. Remember it exactly as you enter it.</span>
+                  <% if (securityErrors.securityAnswer) { %>
+                    <span class="field-error"><%= securityErrors.securityAnswer.msg %></span>
+                  <% } %>
+                </div>
+
+                <% if (securityErrors.general) { %>
+                  <p class="form-error"><%= securityErrors.general.msg %></p>
+                <% } %>
+
+                <div class="form-footer">
+                  <button type="submit" class="primary-button">Update recovery details</button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Storage overview -->
+            <section class="settings-section" id="storage">
+              <div class="section-heading">
+                <div>
+                  <h2>Storage overview</h2>
+                  <p>See how much of your available storage you're using.</p>
+                </div>
+              </div>
+
+              <div class="storage-overview">
+                <div class="storage-heading">
+                  <div>
+                    <span class="storage-label">Storage used</span>
+                    <strong><%= storageUsed %></strong>
+                  </div>
+                  <span class="storage-limit">of <%= storageLimit %></span>
+                </div>
+
+                <div class="storage-track">
+                  <div
+                    class="storage-fill"
+                    style="--storage-used: <%= Number(storagePercentage) %>%"
+                  ></div>
+                </div>
+
+                <div class="storage-percentage">
+                  <span><%= storagePercentage %>% used</span>
+                  <span><%= fileCount %> files</span>
+                </div>
+              </div>
+
+              <div class="storage-statistics">
+                <div class="storage-stat">
+                  <i data-lucide="files"></i>
+                  <div>
+                    <span>Uploaded files</span>
+                    <strong><%= fileCount %></strong>
+                  </div>
+                </div>
+
+                <div class="storage-stat">
+                  <i data-lucide="folder"></i>
+                  <div>
+                    <span>Folders</span>
+                    <strong><%= folderCount %></strong>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Delete account -->
+            <section class="settings-section delete-section" id="delete-account">
+              <div class="section-heading">
+                <div>
+                  <h2>Delete account</h2>
+                  <p>Permanently remove your Vault account and its data.</p>
+                </div>
+              </div>
+
+              <div class="delete-warning">
+                <i data-lucide="alert-triangle"></i>
+                <div>
+                  <strong>This action cannot be undone.</strong>
+                  <p>
+                    Deleting your account will remove your folders, files,
+                    and sharing links. You will lose access to your Vault data.
+                  </p>
+                </div>
+              </div>
+
+              <form
+                action="/account/delete"
+                method="POST"
+                class="settings-form delete-form"
+                onsubmit="return confirm('Are you sure you want to permanently delete your account? This cannot be undone.');"
+              >
+                <div class="form-group">
+                  <label for="deletePassword">Confirm your password</label>
+                  <input
+                    type="password"
+                    id="deletePassword"
+                    name="password"
+                    placeholder="Enter your password to continue"
+                    required
+                  >
+                  <% if (deleteErrors.password) { %>
+                    <span class="field-error"><%= deleteErrors.password.msg %></span>
+                  <% } %>
+                </div>
+
+                <% if (deleteErrors.general) { %>
+                  <p class="form-error"><%= deleteErrors.general.msg %></p>
+                <% } %>
+
+                <button type="submit" class="delete-button">
+                  <i data-lucide="trash-2"></i>
+                  Permanently delete account
+                </button>
+              </form>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

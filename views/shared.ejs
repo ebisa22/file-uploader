@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Shared Folders', cssPath: 'shared.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="shared-page">
+      <div class="shared-container">
+        <div class="page-heading">
+          <div>
+            <span class="eyebrow">SHARING MANAGEMENT</span>
+            <h1>Shared folders</h1>
+            <p>Manage the folders you've made accessible through sharing links.</p>
+          </div>
+
+          <a href="/folders" class="back-button">
+            <i data-lucide="folder"></i>
+            My files
+          </a>
+        </div>
+
+        <section class="sharing-summary">
+          <div class="summary-icon">
+            <i data-lucide="share-2"></i>
+          </div>
+          <div>
+            <span>Total shared folders</span>
+            <strong><%= sharedFolderCount %></strong>
+          </div>
+        </section>
+
+        <section class="shared-section">
+          <div class="section-heading">
+            <div>
+              <h2>Your sharing links</h2>
+              <p>Review and manage your existing shared folders.</p>
+            </div>
+            <span class="share-total"><%= sharedFolders.length %> links</span>
+          </div>
+
+          <% if (sharedFolders.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i data-lucide="share"></i>
+              </div>
+              <h3>No shared folders yet</h3>
+              <p>When you share a folder, its sharing link will appear here.</p>
+              <a href="/folders" class="back-button">
+                Browse my folders
+              </a>
+            </div>
+          <% } else { %>
+            <div class="shared-list">
+              <% sharedFolders.forEach(shared => { %>
+                <article class="shared-card">
+                  <div class="shared-card-main">
+                    <div class="shared-folder-icon">
+                      <i data-lucide="folder"></i>
+                    </div>
+
+                    <div class="shared-info">
+                      <h3><%= shared.folder.name %></h3>
+                      <span class="share-date">
+                        Shared on <%= shared.formattedDate %>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="shared-details">
+                    <div class="detail-item">
+                      <span>Expiration</span>
+                      <strong><%= shared.formattedExpiry %></strong>
+                    </div>
+
+                    <div class="detail-item">
+                      <span>Status</span>
+                      <span class="status <%= shared.status %>">
+                        <%= shared.status %>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="shared-actions">
+                    <% if (shared.status === 'active') { %>
+                      <button
+                        type="button"
+                        class="copy-button"
+                        data-copy-link="<%= shared.shareUrl %>"
+                      >
+                        <i data-lucide="copy"></i>
+                        Copy link
+                      </button>
+
+                      <form action="/shared/<%= shared.id %>/revoke" method="POST">
+                        <button type="submit" class="revoke-button">
+                          <i data-lucide="x-circle"></i>
+                          Revoke
+                        </button>
+                      </form>
+                    <% } %>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script>
+      lucide.createIcons();
+
+      document.querySelectorAll('[data-copy-link]').forEach(button => {
+        button.addEventListener('click', async () => {
+          const link = button.dataset.copyLink;
+
+          try {
+            await navigator.clipboard.writeText(link);
+            button.innerHTML = '<i data-lucide="check"></i> Copied';
+            lucide.createIcons();
+          } catch (error) {
+            console.error('Could not copy sharing link:', error);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

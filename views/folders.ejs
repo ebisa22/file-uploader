@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'My Files', cssPath: 'folders.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="folders-page">
+      <div class="folders-container">
+        <div class="page-heading">
+          <div>
+            <span class="eyebrow">YOUR WORKSPACE</span>
+            <h1>My Files</h1>
+            <p>Organize your files and folders in one place.</p>
+          </div>
+
+          <a href="/dashboard" class="create-button">
+            <i data-lucide="plus"></i>
+            Create folder
+          </a>
+        </div>
+
+        <section class="folder-summary">
+          <div class="summary-icon">
+            <i data-lucide="folder"></i>
+          </div>
+          <div>
+            <span>Total folders</span>
+            <strong><%= folderCount %></strong>
+          </div>
+        </section>
+
+        <section class="folders-section">
+          <div class="section-heading">
+            <div>
+              <h2>All folders</h2>
+              <p>Your folders in the main directory.</p>
+            </div>
+            <span class="folder-total"><%= folderCount %> folders</span>
+          </div>
+
+          <% if (folders.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i data-lucide="folder-plus"></i>
+              </div>
+              <h3>No folders yet</h3>
+              <p>Create your first folder to start organizing your files.</p>
+              <a href="/dashboard" class="create-button">
+                <i data-lucide="plus"></i>
+                Create your first folder
+              </a>
+            </div>
+          <% } else { %>
+            <div class="folder-grid">
+              <% folders.forEach(folder => { %>
+                <a href="/folders/<%= folder.id %>" class="folder-card">
+                  <div class="folder-card-top">
+                    <div class="folder-icon">
+                      <i data-lucide="folder"></i>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="open-icon"></i>
+                  </div>
+
+                  <h3><%= folder.name %></h3>
+
+                  <div class="folder-meta">
+                    <span>
+                      <i data-lucide="file"></i>
+                      <%= folder._count.files %> files
+                    </span>
+                    <span>
+                      <i data-lucide="folder"></i>
+                      <%= folder._count.children %> folders
+                    </span>
+                  </div>
+                </a>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

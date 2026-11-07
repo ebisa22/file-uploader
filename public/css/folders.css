@@ -1,0 +1,266 @@
+.folders-page {
+  min-height: calc(100vh - 150px);
+  padding: 56px 6%;
+  background: #faf9f5;
+}
+
+.folders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 38px;
+}
+
+.eyebrow {
+  color: #66816e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.page-heading h1 {
+  margin: 9px 0;
+  color: #263b30;
+  font-size: 34px;
+  font-weight: 650;
+}
+
+.page-heading p,
+.section-heading p {
+  margin: 0;
+  color: #7c827b;
+  font-size: 14px;
+}
+
+.create-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 19px;
+  border: 1px solid #426b52;
+  border-radius: 7px;
+  background: #426b52;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.create-button:hover {
+  background: #34563f;
+  transform: translateY(-1px);
+}
+
+.create-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.folder-summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: fit-content;
+  min-width: 210px;
+  margin-bottom: 45px;
+  padding: 18px 22px;
+  border: 1px solid #e9e7de;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.summary-icon,
+.folder-icon,
+.empty-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: #edf2e9;
+  color: #52745a;
+}
+
+.summary-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 8px;
+}
+
+.summary-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.folder-summary span {
+  display: block;
+  margin-bottom: 4px;
+  color: #81867f;
+  font-size: 12px;
+}
+
+.folder-summary strong {
+  color: #2c4033;
+  font-size: 21px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.section-heading h2 {
+  margin: 0 0 7px;
+  color: #2b3d32;
+  font-size: 20px;
+  font-weight: 650;
+}
+
+.folder-total {
+  color: #788078;
+  font-size: 12px;
+}
+
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 17px;
+}
+
+.folder-card {
+  display: block;
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid #e9e7de;
+  border-radius: 9px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.folder-card:hover {
+  border-color: #b8c8b7;
+  box-shadow: 0 7px 20px rgba(42, 62, 47, 0.06);
+  transform: translateY(-2px);
+}
+
+.folder-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.folder-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 8px;
+}
+
+.folder-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.open-icon {
+  width: 17px;
+  height: 17px;
+  color: #a1a69e;
+}
+
+.folder-card h3 {
+  overflow: hidden;
+  margin: 0 0 17px;
+  color: #304336;
+  font-size: 15px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  color: #858b83;
+  font-size: 11px;
+}
+
+.folder-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.folder-meta svg {
+  width: 13px;
+  height: 13px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 65px 20px;
+  border: 1px dashed #d9ded3;
+  border-radius: 10px;
+  background: #fff;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+}
+
+.empty-icon svg {
+  width: 27px;
+  height: 27px;
+}
+
+.empty-state h3 {
+  margin: 0 0 9px;
+  color: #304336;
+  font-size: 18px;
+}
+
+.empty-state p {
+  margin: 0 0 22px;
+  color: #858b83;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .folders-page {
+    padding: 38px 5%;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-heading h1 {
+    font-size: 29px;
+  }
+
+  .folder-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .folder-summary {
+    width: 100%;
+  }
+}
