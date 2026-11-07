@@ -2,46 +2,52 @@ import { body, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { prisma } from "../../../lib/prisma.js";
 
-const checkConfirmPassword = async (value, { req }) => {
-  if (value !== req.body.password) {
+const checkConfirmPassword = (value, { req }) => {
+  if (value !== req.body.newPassword) {
     throw new Error("Passwords don't match");
   }
   return true;
 };
+
 const checkCorrectPassword = async (value, { req }) => {
-  const { password } = await prisma.user.findUnique({
-    where: {
-      id: req.user.id,
-    },
-    select: {
-      password: true,
-    },
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
+    select: { password: true },
   });
-  const correctPassword = await bcrypt.compare(password, value);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const correctPassword = await bcrypt.compare(value, user.password);
+
   if (!correctPassword) {
     throw new Error("Incorrect password");
   }
+
   return true;
 };
+
 const validationFields = [
   body("currentPassword")
-    .custom(checkCorrectPassword)
-    .withMessage("Incorrect Password"),
-  body("newPassword").isStrongPassword().withMessage("Enter strong password"),
+    .notEmpty()
+    .withMessage("Current password is required")
+    .bail()
+    .custom(checkCorrectPassword),
+
+  body("newPassword").isStrongPassword().withMessage("Enter a strong password"),
+
   body("confirmPassword")
-    .custom(checkConfirmPassword)
-    .withMessage("Passwords don't match"),
+    .notEmpty()
+    .withMessage("Please confirm your password")
+    .bail()
+    .custom(checkConfirmPassword),
 ];
 
-const validate = async (req, res, next) => {
-  const values = req.body;
+const validate = (req, res, next) => {
   const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    req.validationErrors = null;
-    return next();
-  } else {
-    req.validationErrors = errors.mapped();
-  }
+  req.validationErrors = errors.isEmpty() ? null : errors.mapped();
+
   next();
 };
 

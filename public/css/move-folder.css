@@ -1,0 +1,246 @@
+.move-page {
+ width: min(760px, calc(100% - 48px));
+ min-height: 70vh;
+ margin: 0 auto;
+ padding: 52px 0 80px;
+ color: var(--text-primary);
+}
+
+.back-link {
+ display: flex;
+ align-items: center;
+ gap: 9px;
+ width: fit-content;
+ margin-bottom: 32px;
+ color: var(--text-secondary);
+ font-size: 0.88rem;
+ text-decoration: none;
+ transition: color 0.2s ease;
+}
+
+.back-link:hover {
+ color: var(--accent);
+}
+
+.back-link svg {
+ width: 16px;
+ height: 16px;
+}
+
+.move-card {
+ padding: 34px;
+ border: 1px solid var(--border);
+ border-radius: 14px;
+ background: #fffdf8;
+}
+
+.move-icon {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ width: 48px;
+ height: 48px;
+ margin-bottom: 25px;
+ border-radius: 12px;
+ background: #edf1e8;
+ color: var(--accent);
+}
+
+.move-icon svg {
+ width: 23px;
+ height: 23px;
+}
+
+.eyebrow {
+ margin: 0 0 9px;
+ color: var(--accent);
+ font-size: 0.72rem;
+ font-weight: 700;
+ letter-spacing: 0.13em;
+}
+
+.move-card h1 {
+ margin: 0;
+ font-family: "Playfair Display", Georgia, serif;
+ font-size: clamp(1.9rem, 4vw, 2.4rem);
+ font-weight: 600;
+ letter-spacing: -0.04em;
+}
+
+.move-description {
+ margin: 11px 0 28px;
+ color: var(--text-secondary);
+ font-size: 0.92rem;
+ line-height: 1.6;
+}
+
+.move-description strong {
+ color: var(--text-primary);
+ font-weight: 600;
+}
+
+.current-location {
+ margin-bottom: 27px;
+ padding: 16px;
+ border: 1px solid var(--border);
+ border-radius: 9px;
+ background: #f8f7f0;
+}
+
+.current-location span {
+ display: block;
+ margin-bottom: 10px;
+ color: var(--text-secondary);
+ font-size: 0.76rem;
+}
+
+.current-location div {
+ display: flex;
+ align-items: center;
+ gap: 9px;
+ font-size: 0.88rem;
+}
+
+.current-location svg {
+ width: 17px;
+ height: 17px;
+ color: var(--accent);
+}
+
+.move-card form label {
+ display: block;
+ margin-bottom: 9px;
+ font-size: 0.84rem;
+ font-weight: 600;
+}
+
+.select-wrapper {
+ position: relative;
+ display: flex;
+ align-items: center;
+}
+
+.select-wrapper>svg:first-child {
+ position: absolute;
+ left: 13px;
+ width: 18px;
+ height: 18px;
+ color: var(--accent);
+ pointer-events: none;
+}
+
+.select-wrapper>svg:last-child {
+ position: absolute;
+ right: 13px;
+ width: 17px;
+ height: 17px;
+ color: var(--text-secondary);
+ pointer-events: none;
+}
+
+.select-wrapper select {
+ width: 100%;
+ height: 48px;
+ padding: 0 42px;
+ appearance: none;
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ outline: none;
+ background: #fff;
+ color: var(--text-primary);
+ font: inherit;
+ font-size: 0.88rem;
+ cursor: pointer;
+}
+
+.select-wrapper select:focus {
+ border-color: var(--accent);
+ box-shadow: 0 0 0 3px rgba(75, 105, 79, 0.1);
+}
+
+.field-hint {
+ margin: 10px 0 0;
+ color: var(--text-secondary);
+ font-size: 0.77rem;
+ line-height: 1.5;
+}
+
+.move-actions {
+ display: flex;
+ justify-content: flex-end;
+ gap: 10px;
+ margin-top: 30px;
+ padding-top: 22px;
+ border-top: 1px solid var(--border);
+}
+
+.cancel-button,
+.move-button {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ min-height: 43px;
+ padding: 0 17px;
+ border: 1px solid transparent;
+ border-radius: 8px;
+ font: inherit;
+ font-size: 0.86rem;
+ font-weight: 600;
+ text-decoration: none;
+ cursor: pointer;
+ transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.cancel-button {
+ border-color: var(--border);
+ background: #fff;
+ color: var(--text-primary);
+}
+
+.cancel-button:hover {
+ background: #f3f1e9;
+}
+
+.move-button {
+ background: var(--accent);
+ color: #fff;
+}
+
+.move-button:hover {
+ background: var(--accent-hover, #365a48);
+ transform: translateY(-1px);
+}
+
+.move-button svg {
+ width: 16px;
+ height: 16px;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+ outline: 3px solid rgba(75, 105, 79, 0.25);
+ outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+ .move-page {
+  width: calc(100% - 32px);
+  padding: 35px 0 55px;
+ }
+
+ .move-card {
+  padding: 23px 19px;
+ }
+
+ .move-actions {
+  flex-direction: column-reverse;
+ }
+
+ .cancel-button,
+ .move-button {
+  width: 100%;
+ }
+}
+

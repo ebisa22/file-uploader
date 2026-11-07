@@ -215,7 +215,7 @@
                 <div class="form-group">
                   <label for="securityAnswer">New security answer</label>
                   <input
-                    type="password"
+                    type="text"
                     id="securityAnswer"
                     name="securityAnswer"
                     placeholder="Enter your new security answer"
@@ -322,14 +322,11 @@
                     placeholder="Enter your password to continue"
                     required
                   >
-                  <% if (deleteErrors.password) { %>
-                    <span class="field-error"><%= deleteErrors.password.msg %></span>
+                  <% if (deleteErrors) { %>
+                    <span class="field-error"><%= deleteErrors.msg %></span>
                   <% } %>
                 </div>
-
-                <% if (deleteErrors.general) { %>
-                  <p class="form-error"><%= deleteErrors.general.msg %></p>
-                <% } %>
+ 
 
                 <button type="submit" class="delete-button">
                   <i data-lucide="trash-2"></i>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
   <%- include('./partials/head', { title: 'My Files', cssPath: 'dashboard.css' }) %>
   <body>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="storage-track">
-                <div class="storage-progress-fill" style="--storage-used: <%= Number(storagePercentage) %>%;"></div>
+              <div class="storage-progress-fill" style="--storage-used: <%= Number(storagePercentage) %>%;"></div>
             </div>
 
             <p><%= storagePercentage %>% of your storage used</p>
@@ -46,10 +46,13 @@
             <i data-lucide="settings"></i>
             <span>Account settings</span>
           </a>
-          <a href="/logout" class="sidebar-link logout-link">
-            <i data-lucide="log-out"></i>
-            <span>Log out</span>
-          </a>
+
+          <form action="/logout" method="POST" class="sidebar-link logout-link">
+            <button type="submit" class="logout-button">
+              <i data-lucide="log-out"></i>
+              <span>Log out</span>
+            </button>
+          </form>
         </div>
       </aside>
 
@@ -210,7 +213,11 @@
       </section>
     </main>
 
-    <dialog class="dashboard-modal" id="createFolderModal">
+    <dialog
+      class="dashboard-modal"
+      id="createFolderModal"
+      data-open-on-load="<%= typeof folderError !== 'undefined' && folderError ? 'true' : 'false' %>"
+    >
       <form action="/folders" method="POST" class="modal-content">
         <div class="modal-header">
           <div>
@@ -222,6 +229,10 @@
           </button>
         </div>
 
+        <% if (typeof folderError !== 'undefined' && folderError) { %>
+          <p class="modal-error"><%= folderError %></p>
+        <% } %>
+
         <label for="folderName">Folder name</label>
         <input
           type="text"
@@ -229,7 +240,9 @@
           name="name"
           placeholder="e.g. Personal documents"
           maxlength="100"
+          value="<%= typeof folderName !== 'undefined' ? folderName : '' %>"
           required
+          autofocus
         >
 
         <div class="modal-actions">
@@ -277,6 +290,38 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
+
+      const modalOpenButtons = document.querySelectorAll('[data-modal-open]');
+      const modalCloseButtons = document.querySelectorAll('[data-modal-close]');
+      const modals = document.querySelectorAll('.dashboard-modal');
+
+      modalOpenButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const modal = document.getElementById(button.dataset.modalOpen);
+
+          if (modal) {
+            modal.showModal();
+          }
+        });
+      });
+
+      modalCloseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          button.closest('dialog')?.close();
+        });
+      });
+
+      modals.forEach(modal => {
+        modal.addEventListener('click', event => {
+          if (event.target === modal) {
+            modal.close();
+          }
+        });
+
+        if (modal.dataset.openOnLoad === 'true') {
+          modal.showModal();
+        }
+      });
     </script>
   </body>
 </html>

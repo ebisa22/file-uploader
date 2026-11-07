@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Move Folder', cssPath: 'move-folder.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="move-page">
+      <a href="<%= folder.parentId ? `/folders/${folder.parentId}` : '/folders' %>" class="back-link">
+        <i data-lucide="arrow-left"></i>
+        Back to folder
+      </a>
+
+      <section class="move-card">
+        <div class="move-icon">
+          <i data-lucide="folder-input"></i>
+        </div>
+
+        <p class="eyebrow">FOLDER ORGANIZATION</p>
+        <h1>Move folder</h1>
+        <p class="move-description">
+          Choose where you want to move
+          <strong><%= folder.name %></strong>.
+        </p>
+
+        <div class="current-location">
+          <span>Current location</span>
+          <div>
+            <i data-lucide="folder"></i>
+            <strong>
+              <%= folder.parent ? folder.parent.name : 'My Folders (Root)' %>
+            </strong>
+          </div>
+        </div>
+
+        <form action="/folders/<%= folder.id %>/move" method="POST">
+          <label for="destinationId">New location</label>
+
+          <div class="select-wrapper">
+            <i data-lucide="folder"></i>
+            <select name="destinationId" id="destinationId" required>
+              <option value="">My Folders (Root)</option>
+
+              <% destinationFolders.forEach(destination => { %>
+                <option value="<%= destination.id %>">
+                  <%= destination.path %>
+                </option>
+              <% }) %>
+            </select>
+            <i data-lucide="chevron-down"></i>
+          </div>
+
+          <p class="field-hint">
+            Moving this folder will also move all its contents and subfolders.
+          </p>
+
+          <div class="move-actions">
+            <a href="<%= folder.parentId ? `/folders/${folder.parentId}` : '/folders' %>" class="cancel-button">
+              Cancel
+            </a>
+            <button type="submit" class="move-button">
+              <i data-lucide="folder-input"></i>
+              Move folder
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
