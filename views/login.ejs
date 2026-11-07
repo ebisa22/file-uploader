@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Log In', cssPath: 'login.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="login-page">
+      <section class="login-panel">
+        <div class="login-heading">
+          <span class="login-eyebrow">WELCOME BACK</span>
+          <h1>Good to see you again.</h1>
+          <p>Log in to access your files and continue where you left off.</p>
+        </div>
+
+        <% if (formErrors.general) { %>
+          <div class="form-alert">
+            <i data-lucide="alert-circle"></i>
+            <span><%= formErrors.general.msg %></span>
+          </div>
+        <% } %>
+
+        <form action="/login" method="POST" class="login-form">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              value="<%= formValues.email || '' %>"
+              autocomplete="email"
+              required
+              class="<%= formErrors.email ? 'input-error' : '' %>"
+            >
+            <% if (formErrors.email) { %>
+              <span class="field-error"><%= formErrors.email.msg %></span>
+            <% } %>
+          </div>
+
+          <div class="form-group">
+            <div class="password-label">
+              <label for="password">Password</label>
+              <a href="/forgot-password">Forgot password?</a>
+            </div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+              class="<%= formErrors.password ? 'input-error' : '' %>"
+            >
+            <% if (formErrors.password) { %>
+              <span class="field-error"><%= formErrors.password.msg %></span>
+            <% } %>
+          </div>
+
+          <button type="submit" class="login-button">
+            Log in
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </form>
+
+        <div class="login-divider">
+          <span></span>
+          <p>NEW TO VAULT?</p>
+          <span></span>
+        </div>
+
+        <a href="/signup" class="signup-link">Create an account</a>
+      </section>
+
+      <aside class="login-aside">
+        <div class="aside-content">
+          <span class="aside-icon"><i data-lucide="folder-lock"></i></span>
+          <p class="aside-eyebrow">YOUR SPACE, YOUR CONTROL</p>
+          <h2>Everything important, in one place.</h2>
+          <p>
+            A private space to keep your documents organized,
+            accessible, and ready whenever you need them.
+          </p>
+
+          <div class="aside-note">
+            <i data-lucide="shield-check"></i>
+            <span>Your files stay private and under your control.</span>
+          </div>
+        </div>
+        <span class="aside-decoration"></span>
+      </aside>
+    </main>
+
+    <%- include('./partials/footer') %>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+  </body>
+</html>

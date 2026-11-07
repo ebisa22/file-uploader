@@ -6,7 +6,7 @@ const createUser=async(req,res,next)=>{
       const formData=req.body;
       const hashedPassword=await bcrypt.hash(formData.password,10);
       const hashedSecurityAnswer=await bcrypt.hash(formData.securityAnswer,10);
-      await prisma.user.create({
+      const user=await prisma.user.create({
          data:{
             firstName:formData.firstName,
             lastName:formData.lastName,

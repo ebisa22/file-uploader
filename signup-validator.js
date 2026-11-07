@@ -74,14 +74,15 @@ const validate = async (req, res, next) => {
     return next();
   }
   res.render("signup", {
-    errors: errors.mapped(),
-    values:{
-        firstName:values.firstName,
-        lastName:values.lastName,
-        email:values.email,
-        securityQuestions
+    user: null,
+    formErrors: errors.mapped(),
+    formValues: {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      securityQuestion: values.securityQuestion,
     },
-    user:null
+    securityQuestions,
   });
 };
 

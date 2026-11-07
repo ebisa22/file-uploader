@@ -16,19 +16,21 @@ const session = expressSession({
     checkPeriod: 15 * 60 * 1000,
     dbRecordIdIsSessionId: true,
     dbRecordIdFunction: undefined,
-    enableNativeMysqlSetUpsert: true,
   }),
 });
 
-const localStrategy=new LocalStrategy(async (username,password,done)=>{
+const localStrategy=new LocalStrategy({
+  usernameField:'email',
+  passwordField:'password'
+},async (email,password,done)=>{
    try {
      const user=await prisma.user.findFirst({
       where:{
-          email:username
+          email:email
       }
      })
      if(!user){
-      return done(null,false,{message:"Incorrect username"})
+      return done(null,false,{message:"Incorrect email"})
      }
      const correctPassword=await bcrypt.compare(password,user.password);
      if(!correctPassword){

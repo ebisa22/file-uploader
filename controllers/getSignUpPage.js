@@ -11,10 +11,10 @@ const securityQuestions = [
 
 const getSignUpPage = async (req, res, next) => {
   res.render("signup", {
-     errors:{},
-     values:{},
-     user:req.user ||null,
-     securityQuestions
+    user: null,
+    formErrors: {},
+    formValues: {},
+    securityQuestions: securityQuestions,
   });
   console.log(req.body)
 };
