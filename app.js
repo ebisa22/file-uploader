@@ -6,6 +6,7 @@ import dashboardRouter from './routes/dashboard.js';
 import foldersRouter from './routes/folders.js';
 import sharedRouter from './routes/shared.js';
 import accountRouter from './routes/account.js'
+import filesRouter from './routes/files.js';
 import logoutRouter from './routes/logout.js'
 import 'dotenv/config';
 
@@ -21,20 +22,21 @@ app.set('views',path.join(__dirname,"views"));
 
 
 app.use(session);
-app.use(passport.session())
-
+app.use(passport.session());
 
 app.use('/',homeRouter);
 app.use('/dashboard',dashboardRouter);
 app.use('/folders',foldersRouter);
 app.use('/shared',sharedRouter);
 app.use('/account',accountRouter);
+app.use("/files",filesRouter);
 app.use('/logout',logoutRouter);
 app.listen(PORT,(err)=>{
     if(err){
     console.error(err)
     return
     }
+
     console.log('Listening to port',PORT);
 })
 
