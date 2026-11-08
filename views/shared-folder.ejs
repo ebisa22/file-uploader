@@ -1,0 +1,127 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: folder.name, cssPath: 'shared-folder.css' }) %>
+  <body>
+    <main class="shared-page">
+      <header class="shared-navbar">
+        <a href="/" class="brand">Vault</a>
+        <span>Shared folder</span>
+      </header>
+
+      <section class="shared-content">
+        <header class="folder-header">
+          <div class="folder-icon">
+            <i data-lucide="folder-open"></i>
+          </div>
+
+          <p class="eyebrow">SHARED WITH YOU</p>
+          <h1><%= share.folder.name %></h1>
+          <p class="folder-description">
+            Browse and download the contents of this shared folder.
+          </p>
+
+          <div class="share-expiry">
+            <i data-lucide="clock"></i>
+            Available until <%= share.expiresAt.toLocaleDateString() %>
+          </div>
+        </header>
+
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/share/<%= share.token %>">
+            <i data-lucide="folder"></i>
+            <%= share.folder.name %>
+          </a>
+
+          <% breadcrumbs.forEach(crumb => { %>
+            <i data-lucide="chevron-right"></i>
+
+            <% if (crumb.id === folder.id) { %>
+              <span class="current-crumb"><%= crumb.name %></span>
+            <% } else { %>
+              <a href="/share/<%= share.token %>/folders/<%= crumb.id %>">
+                <%= crumb.name %>
+              </a>
+            <% } %>
+          <% }) %>
+          <% if (folder.id !== share.folderId) { %>
+  <a
+    href="<%= folder.parentId === share.folderId
+      ? `/share/${share.token}`
+      : `/share/${share.token}/folders/${folder.parentId}` %>"
+    class="back-link"
+  >
+    <i data-lucide="arrow-left"></i>
+    Back to folder
+  </a>
+<% } %>
+        </nav>
+
+        <section class="folder-contents">
+          <div class="contents-heading">
+            <div>
+              <h2><%= folder.id === share.folderId ? 'Folder contents' : folder.name %></h2>
+              <p><%= folders.length %> folders · <%= files.length %> files</p>
+            </div>
+          </div>
+
+          <% if (folders.length === 0 && files.length === 0) { %>
+            <div class="empty-state">
+              <i data-lucide="folder-open"></i>
+              <h3>This folder is empty</h3>
+              <p>There are currently no files or subfolders here.</p>
+            </div>
+          <% } else { %>
+            <div class="items-list">
+              <% folders.forEach(item => { %>
+                <a
+                  href="/share/<%= share.token %>/folders/<%= item.id %>"
+                  class="item-row folder-row"
+                >
+                  <div class="item-icon folder-item-icon">
+                    <i data-lucide="folder"></i>
+                  </div>
+
+                  <div class="item-info">
+                    <h3><%= item.name %></h3>
+                    <p>Folder</p>
+                  </div>
+
+                  <i data-lucide="chevron-right" class="item-arrow"></i>
+                </a>
+              <% }) %>
+
+              <% files.forEach(file => { %>
+                <div class="item-row">
+                  <div class="item-icon file-item-icon">
+                    <i data-lucide="file"></i>
+                  </div>
+
+                  <div class="item-info">
+                    <h3><%= file.originalName %></h3>
+                    <p><%= file.formattedSize %></p>
+                  </div>
+
+                  <a
+                    href="/share/<%= share.token %>/files/<%= file.id %>/download"
+                    class="download-button"
+                  >
+                    <i data-lucide="download"></i>
+                    <span>Download</span>
+                  </a>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </section>
+      </section>
+
+      <footer class="shared-footer">
+        <p>Shared securely with Vault</p>
+      </footer>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

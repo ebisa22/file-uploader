@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title: 'Move File', cssPath: 'move-folder.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="move-page">
+      <a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>" class="back-link">
+        <i data-lucide="arrow-left"></i>
+        Back to folder
+      </a>
+
+      <section class="move-card">
+        <div class="move-icon">
+          <i data-lucide="file-input"></i>
+        </div>
+
+        <p class="eyebrow">FILE ORGANIZATION</p>
+        <h1>Move file</h1>
+        <p class="move-description">
+          Choose where you want to move
+          <strong><%= file.originalName %></strong>.
+        </p>
+
+        <div class="current-location">
+          <span>Current location</span>
+          <div>
+            <i data-lucide="folder"></i>
+            <strong>
+              <%= file.folder ? file.folder.name : 'My Folders (Root)' %>
+            </strong>
+          </div>
+        </div>
+
+        <form action="/files/<%= file.id %>/move" method="POST">
+          <label for="destinationId">New location</label>
+
+          <div class="select-wrapper">
+            <i data-lucide="folder"></i>
+            <select name="destinationId" id="destinationId">
+              <option value="">My Folders (Root)</option>
+
+              <% destinationFolders.forEach(destination => { %>
+                <option value="<%= destination.id %>">
+                  <%= destination.path %>
+                </option>
+              <% }) %>
+            </select>
+            <i data-lucide="chevron-down"></i>
+          </div>
+
+          <p class="field-hint">
+            The file will be moved to the selected folder. Its stored filename will remain unchanged.
+          </p>
+
+          <div class="move-actions">
+            <a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>" class="cancel-button">
+              Cancel
+            </a>
+            <button type="submit" class="move-button">
+              <i data-lucide="file-input"></i>
+              Move file
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

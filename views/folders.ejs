@@ -1,4 +1,5 @@
- <!DOCTYPE html>
+ 
+<!DOCTYPE html>
 <html lang="en">
   <%- include('./partials/head', {
     title: typeof folder !== 'undefined' ? folder.name : 'My Folders',
@@ -8,9 +9,9 @@
     <%- include('./partials/navbar', { user }) %>
 
     <%
-      const isSubFolderPage = typeof folder !== 'undefined';
+      const isSubFolderPage = typeof folder !== 'undefined' && folder !== null;
       const currentFolders = folders || [];
-      const currentFiles = typeof files !== 'undefined' ? files : [];
+      const currentFiles = files || [];
     %>
 
     <main class="folders-page">
@@ -23,7 +24,7 @@
 
           <% if (isSubFolderPage) { %>
             <nav class="breadcrumb" aria-label="Breadcrumb">
-              <a href="/folders">My Folders</a>
+              <a href="/folders">My Files</a>
               <i data-lucide="chevron-right"></i>
               <span><%= folder.name %></span>
             </nav>
@@ -50,18 +51,18 @@
               <i data-lucide="pencil"></i>
               Rename
             </button>
-  <a href="/folders/<%= folder.id %>/move" class="action-button">
-  <i data-lucide="folder-input"></i>
-  Move
-</a>
-            <button
-              type="button"
-              class="action-button action-delete"
-              data-modal-open="deleteCurrentFolder"
-            >
-              <i data-lucide="trash-2"></i>
-              Delete
-            </button>
+
+            <a href="/folders/<%= folder.id %>/move" class="action-button">
+              <i data-lucide="folder-input"></i>
+              Move
+            </a>
+
+            <form action="/folders/<%= folder.id %>/delete" method="POST">
+              <button type="submit" class="action-button action-delete">
+                <i data-lucide="trash-2"></i>
+                Delete
+              </button>
+            </form>
           </div>
         <% } else { %>
           <div class="folder-count">
@@ -70,6 +71,7 @@
           </div>
         <% } %>
       </header>
+
       <section class="folder-create-section">
         <form action="/folders" method="POST" class="create-folder-form">
           <% if (isSubFolderPage) { %>
@@ -84,7 +86,6 @@
               placeholder="<%= isSubFolderPage ? 'Name your new subfolder' : 'Name your new folder' %>"
               maxlength="100"
               required
-              
             >
           </label>
 
@@ -98,7 +99,7 @@
       <section class="folder-section">
         <div class="section-heading">
           <div>
-            <h2><%= isSubFolderPage ? 'Subfolders' : 'All folders' %></h2>
+            <h2><%= isSubFolderPage ? 'Subfolders' : 'Folders' %></h2>
             <p>
               <%= currentFolders.length %>
               <%= currentFolders.length === 1 ? 'folder' : 'folders' %>
@@ -123,13 +124,11 @@
                   <div class="folder-meta">
                     <span>
                       <i data-lucide="files"></i>
-                      <%= item._count ? item._count.files : 0 %>
-                      files
+                      <%= item._count?.files ?? 0 %> files
                     </span>
                     <span>
                       <i data-lucide="folder"></i>
-                      <%= item._count ? item._count.children : 0 %>
-                      subfolders
+                      <%= item._count?.children ?? 0 %> subfolders
                     </span>
                   </div>
                 </a>
@@ -144,37 +143,36 @@
                   >
                     <i data-lucide="pencil"></i>
                   </button>
-                  <a href="/folders/<%= item.id %>/move" class="icon-button" title="Move" aria-label="Move <%= item.name %>">
-  <i data-lucide="folder-input"></i>
-</a>
-                  <button
-                    type="button"
-                    class="icon-button delete-icon-button"
-                    aria-label="Delete <%= item.name %>"
-                    title="Delete"
-                    data-modal-open="deleteFolder-<%= item.id %>"
+
+                  <a
+                    href="/folders/<%= item.id %>/move"
+                    class="icon-button"
+                    title="Move"
+                    aria-label="Move <%= item.name %>"
                   >
-                    <i data-lucide="trash-2"></i>
-                  </button>
+                    <i data-lucide="folder-input"></i>
+                  </a>
+
+                  <form action="/folders/<%= item.id %>/delete" method="POST">
+                    <button
+                      type="submit"
+                      class="icon-button delete-icon-button"
+                      title="Delete"
+                      aria-label="Delete <%= item.name %>"
+                    >
+                      <i data-lucide="trash-2"></i>
+                    </button>
+                  </form>
                 </div>
               </article>
-              <!-- Name you-->
+
               <dialog class="folder-modal" id="renameFolder-<%= item.id %>">
-                <form
-                  action="/folders/<%= item.id %>/rename"
-                  method="POST"
-                  class="modal-content"
-                >
+                <form action="/folders/<%= item.id %>/rename" method="POST" class="modal-content">
                   <div class="modal-heading">
                     <div class="modal-icon">
                       <i data-lucide="pencil"></i>
                     </div>
-                    <button
-                      type="button"
-                      class="modal-close"
-                      data-modal-close
-                      aria-label="Close"
-                    >
+                    <button type="button" class="modal-close" data-modal-close aria-label="Close">
                       <i data-lucide="x"></i>
                     </button>
                   </div>
@@ -184,9 +182,9 @@
                     Choose a new name for "<%= item.name %>".
                   </p>
 
-                  <label for="rename-input-<%= item.id %>">Folder name</label>
+                  <label for="rename-folder-<%= item.id %>">Folder name</label>
                   <input
-                    id="rename-input-<%= item.id %>"
+                    id="rename-folder-<%= item.id %>"
                     type="text"
                     name="name"
                     value="<%= item.name %>"
@@ -195,49 +193,8 @@
                   >
 
                   <div class="modal-actions">
-                    <button type="button" class="cancel-button" data-modal-close>
-                      Cancel
-                    </button>
-                    <button type="submit" class="create-button">
-                      Save changes
-                    </button>
-                  </div>
-                </form>
-              </dialog>
-
-              <dialog class="folder-modal" id="deleteFolder-<%= item.id %>">
-                <form
-                  action="/folders/<%= item.id %>/delete"
-                  method="POST"
-                  class="modal-content"
-                >
-                  <div class="modal-heading">
-                    <div class="modal-icon modal-icon-danger">
-                      <i data-lucide="trash-2"></i>
-                    </div>
-                    <button
-                      type="button"
-                      class="modal-close"
-                      data-modal-close
-                      aria-label="Close"
-                    >
-                      <i data-lucide="x"></i>
-                    </button>
-                  </div>
-
-                  <h2>Delete folder?</h2>
-                  <p class="modal-description">
-                    Are you sure you want to delete "<%= item.name %>"?
-                    Its subfolders and stored files will also be affected.
-                  </p>
-
-                  <div class="modal-actions">
-                    <button type="button" class="cancel-button" data-modal-close>
-                      Cancel
-                    </button>
-                    <button type="submit" class="confirm-delete-button">
-                      Delete folder
-                    </button>
+                    <button type="button" class="cancel-button" data-modal-close>Cancel</button>
+                    <button type="submit" class="create-button">Save changes</button>
                   </div>
                 </form>
               </dialog>
@@ -258,64 +215,148 @@
         <% } %>
       </section>
 
-      <% if (isSubFolderPage) { %>
-        <section class="folder-section files-section">
-          <div class="section-heading">
-            <div>
-              <h2>Files</h2>
-              <p>
-                <%= currentFiles.length %>
-                <%= currentFiles.length === 1 ? 'file' : 'files' %>
-              </p>
-            </div>
+      <section class="folder-section files-section">
+        <div class="section-heading">
+          <div>
+            <h2><%= isSubFolderPage ? 'Files in this folder' : 'Files in My Files' %></h2>
+            <p>
+              <%= currentFiles.length %>
+              <%= currentFiles.length === 1 ? 'file' : 'files' %>
+            </p>
           </div>
+        </div>
 
-          <% if (currentFiles.length > 0) { %>
-            <div class="file-list">
-              <% currentFiles.forEach(file => { %>
-                <div class="file-row">
-                  <div class="file-icon">
-                    <i data-lucide="file"></i>
-                  </div>
-
-                  <div class="file-details">
-                    <h3><%= file.originalName %></h3>
-                    <p><%= file.mimeType %></p>
-                  </div>
-
-                  <span class="file-size">
-                    <%= (Number(file.size) / (1024 * 1024)).toFixed(2) %> MB
-                  </span>
-                </div>
-              <% }) %>
-            </div>
-          <% } else { %>
-            <div class="empty-state file-empty-state">
-              <div class="empty-icon">
-                <i data-lucide="files"></i>
-              </div>
-              <h3>No files in this folder</h3>
-              <p>Files uploaded to this folder will appear here.</p>
-            </div>
-          <% } %>
-        </section>
-
-        <dialog class="folder-modal" id="renameCurrentFolder">
+        <div class="folder-upload-section">
           <form
-            action="/folders/<%= folder.id %>/rename"
+            action="/files/upload"
             method="POST"
-            class="modal-content"
+            enctype="multipart/form-data"
+            class="folder-upload-form"
           >
+            <% if (isSubFolderPage) { %>
+              <input type="hidden" name="folderId" value="<%= folder.id %>">
+            <% } %>
+            <label for="folderFileUpload">
+              <i data-lucide="upload"></i>
+              Upload a file to <%= isSubFolderPage ? folder.name : 'My Files' %>
+            </label>
+            <input type="file" id="folderFileUpload" name="file" required>
+            <button type="submit" class="create-button">
+              Upload file
+            </button>
+          </form>
+        </div>
+
+        <% if (currentFiles.length > 0) { %>
+          <div class="file-list">
+            <% currentFiles.forEach(file => { %>
+              <div class="file-row">
+                <div class="file-icon">
+                  <i data-lucide="file"></i>
+                </div>
+
+                <div class="file-details">
+                  <h3 title="<%= file.originalName %>"><%= file.originalName %></h3>
+                  <p><%= file.mimeType %></p>
+                </div>
+
+                <span class="file-size"><%= file.formattedSize %></span>
+
+                <div class="file-actions">
+                  <a
+                    href="/files/<%= file.id %>/download"
+                    class="icon-button"
+                    title="Download"
+                    aria-label="Download <%= file.originalName %>"
+                  >
+                    <i data-lucide="download"></i>
+                  </a>
+
+                  <button
+                    type="button"
+                    class="icon-button"
+                    title="Rename"
+                    aria-label="Rename <%= file.originalName %>"
+                    data-modal-open="renameFile-<%= file.id %>"
+                  >
+                    <i data-lucide="pencil"></i>
+                  </button>
+
+                  <a
+                    href="/files/<%= file.id %>/move"
+                    class="icon-button"
+                    title="Move"
+                    aria-label="Move <%= file.originalName %>"
+                  >
+                    <i data-lucide="folder-input"></i>
+                  </a>
+
+                  <form action="/files/<%= file.id %>/delete" method="POST">
+                    <button
+                      type="submit"
+                      class="icon-button delete-icon-button"
+                      title="Delete"
+                      aria-label="Delete <%= file.originalName %>"
+                    >
+                      <i data-lucide="trash-2"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <dialog class="folder-modal" id="renameFile-<%= file.id %>">
+                <form action="/files/<%= file.id %>/rename" method="POST" class="modal-content">
+                  <div class="modal-heading">
+                    <div class="modal-icon">
+                      <i data-lucide="pencil"></i>
+                    </div>
+                    <button type="button" class="modal-close" data-modal-close aria-label="Close">
+                      <i data-lucide="x"></i>
+                    </button>
+                  </div>
+
+                  <h2>Rename file</h2>
+                  <p class="modal-description">
+                    Change the displayed name of "<%= file.originalName %>".
+                  </p>
+
+                  <label for="rename-file-<%= file.id %>">File name</label>
+                  <input
+                    id="rename-file-<%= file.id %>"
+                    type="text"
+                    name="name"
+                    value="<%= file.originalName %>"
+                    maxlength="255"
+                    required
+                  >
+
+                  <div class="modal-actions">
+                    <button type="button" class="cancel-button" data-modal-close>Cancel</button>
+                    <button type="submit" class="create-button">Save changes</button>
+                  </div>
+                </form>
+              </dialog>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-state file-empty-state">
+            <div class="empty-icon">
+              <i data-lucide="files"></i>
+            </div>
+            <h3>No files here yet</h3>
+            <p>Upload a file and it will appear here.</p>
+          </div>
+        <% } %>
+      </section>
+
+      <% if (isSubFolderPage) { %>
+        <dialog class="folder-modal" id="renameCurrentFolder">
+          <form action="/folders/<%= folder.id %>/rename" method="POST" class="modal-content">
             <div class="modal-heading">
               <div class="modal-icon">
                 <i data-lucide="pencil"></i>
               </div>
-              <button
-                type="button"
-                class="modal-close"
-                data-modal-close
-                aria-label="Close"
-              >
+              <button type="button" class="modal-close" data-modal-close aria-label="Close">
                 <i data-lucide="x"></i>
               </button>
             </div>
@@ -325,9 +366,9 @@
               Choose a new name for "<%= folder.name %>".
             </p>
 
-            <label for="rename-current-input">Folder name</label>
+            <label for="rename-current-folder">Folder name</label>
             <input
-              id="rename-current-input"
+              id="rename-current-folder"
               type="text"
               name="name"
               value="<%= folder.name %>"
@@ -336,49 +377,8 @@
             >
 
             <div class="modal-actions">
-              <button type="button" class="cancel-button" data-modal-close>
-                Cancel
-              </button>
-              <button type="submit" class="create-button">
-                Save changes
-              </button>
-            </div>
-          </form>
-        </dialog>
-
-        <dialog class="folder-modal" id="deleteCurrentFolder">
-          <form
-            action="/folders/<%= folder.id %>/delete"
-            method="POST"
-            class="modal-content"
-          >
-            <div class="modal-heading">
-              <div class="modal-icon modal-icon-danger">
-                <i data-lucide="trash-2"></i>
-              </div>
-              <button
-                type="button"
-                class="modal-close"
-                data-modal-close
-                aria-label="Close"
-              >
-                <i data-lucide="x"></i>
-              </button>
-            </div>
-
-            <h2>Delete folder?</h2>
-            <p class="modal-description">
-              Are you sure you want to delete "<%= folder.name %>"?
-              Its subfolders and stored files will also be affected.
-            </p>
-
-            <div class="modal-actions">
-              <button type="button" class="cancel-button" data-modal-close>
-                Cancel
-              </button>
-              <button type="submit" class="confirm-delete-button">
-                Delete folder
-              </button>
+              <button type="button" class="cancel-button" data-modal-close>Cancel</button>
+              <button type="submit" class="create-button">Save changes</button>
             </div>
           </form>
         </dialog>
@@ -393,8 +393,7 @@
 
       document.querySelectorAll('[data-modal-open]').forEach(button => {
         button.addEventListener('click', () => {
-          const modal = document.getElementById(button.dataset.modalOpen);
-          if (modal) modal.showModal();
+          document.getElementById(button.dataset.modalOpen)?.showModal();
         });
       });
 

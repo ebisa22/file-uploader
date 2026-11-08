@@ -2,25 +2,36 @@ import { prisma } from "../lib/prisma.js";
 
 const getDashboardPage = async (req, res, next) => {
   const user = req.isAuthenticated() ? req.user : null;
+
   if (!user) {
     return res.redirect("/login");
   }
 
   try {
-    const folders = await prisma.folder.findMany({
+    const rootFolders = await prisma.folder.findMany({
       where: {
         userId: user.id,
+        parentId: null,
       },
       include: {
         _count: {
           select: {
             files: true,
+            children: true,
           },
         },
       },
+      orderBy: {
+        name: "asc",
+      },
     });
 
-    const folderCount = folders.length;
+    const folderCount = await prisma.folder.count({
+      where: {
+        userId: user.id,
+      },
+    });
+
     const fileCount = await prisma.file.count({
       where: {
         userId: user.id,
@@ -50,23 +61,21 @@ const getDashboardPage = async (req, res, next) => {
       },
     });
 
-    const recentFiles = await prisma.file.findMany({
+    const rootFiles = await prisma.file.findMany({
       where: {
         userId: user.id,
-      },
-      include: {
-        folder: true,
+        folderId: null,
       },
       orderBy: {
         createdAt: "desc",
       },
-      take: 5,
     });
 
     const storageLimitBytes = 5 * 1024 ** 3;
+
     const storagePercentage = Math.min(
       (usedBytes / storageLimitBytes) * 100,
-      100
+      100,
     );
 
     const formatSize = (bytes) => {
@@ -84,7 +93,7 @@ const getDashboardPage = async (req, res, next) => {
       return `${size.toFixed(1)} ${units[unitIndex]}`;
     };
 
-    const formattedRecentFiles = recentFiles.map((file) => ({
+    const formattedRootFiles = rootFiles.map((file) => ({
       ...file,
       formattedSize: formatSize(Number(file.size)),
       formattedDate: file.createdAt.toLocaleDateString(),
@@ -92,14 +101,14 @@ const getDashboardPage = async (req, res, next) => {
 
     res.render("dashboard", {
       user,
-      folders,
+      rootFolders,
       folderCount,
       fileCount,
       sharedFolderCount,
       storageUsed: formatSize(usedBytes),
       storageLimit: "5 GB",
       storagePercentage: storagePercentage.toFixed(1),
-      recentFiles: formattedRecentFiles,
+      rootFiles: formattedRootFiles,
     });
   } catch (err) {
     next(err);

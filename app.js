@@ -7,7 +7,10 @@ import foldersRouter from './routes/folders.js';
 import sharedRouter from './routes/shared.js';
 import accountRouter from './routes/account.js'
 import filesRouter from './routes/files.js';
-import logoutRouter from './routes/logout.js'
+import forgotPasswordRouter from './routes/forgot-password.js';
+import logoutRouter from './routes/logout.js';
+import notFoundHandler from "./controllers/errors/notFoundHandler.js";
+import errorHandler from "./controllers/errors/errorHandler.js";
 import 'dotenv/config';
 
 const app=express();
@@ -30,7 +33,11 @@ app.use('/folders',foldersRouter);
 app.use('/shared',sharedRouter);
 app.use('/account',accountRouter);
 app.use("/files",filesRouter);
+app.use('/forgot-password',forgotPasswordRouter);
 app.use('/logout',logoutRouter);
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 app.listen(PORT,(err)=>{
     if(err){
     console.error(err)
@@ -41,4 +48,3 @@ app.listen(PORT,(err)=>{
 })
 
 
-// Ninja!Pizza#42

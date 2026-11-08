@@ -583,7 +583,7 @@
   width: min(440px, calc(100% - 32px));
   height: fit-content;
   max-height: 90vh;
-  padding: 0;
+  padding: 3px 15px;
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -599,7 +599,46 @@
    background: rgba(29, 42, 35, 0.38);
    backdrop-filter: blur(3px);
  }
-
+    .file-name-text {
+      display: block;
+      min-width: 0;
+      max-width: 340px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  
+    .file-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+  
+    .file-actions form {
+      display: flex;
+      margin: 0;
+    }
+  
+    .files-table td:last-child {
+      width: 1%;
+    }
+  
+    .file-actions .file-action {
+      flex-shrink: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+  
+    .file-actions .file-action:hover {
+      background: var(--accent-soft);
+    }
+  
+    .file-actions .file-delete-action:hover {
+      background: #fff1ef;
+      color: var(--danger);
+    }
  @keyframes modal-appear {
    from {
      opacity: 0;
@@ -900,4 +939,12 @@
    .modal-content {
      padding: 20px;
    }
+        .file-name-text {
+          max-width: 150px;
+        }
+    
+        .file-actions {
+          gap: 2px;
+        }
  }
+ /* .dashboard-modal*/

@@ -1,0 +1,168 @@
+.error-page {
+ min-height: 72vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 70px 24px;
+}
+
+.error-content {
+ width: 100%;
+ max-width: 850px;
+ display: grid;
+ grid-template-columns: 0.9fr 1.1fr;
+ align-items: center;
+ gap: 65px;
+}
+
+.error-illustration {
+ min-height: 280px;
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ background: #eee9df;
+ border-radius: 8px;
+ overflow: hidden;
+}
+
+.error-code {
+ position: relative;
+ z-index: 1;
+ font-family: "Playfair Display", serif;
+ font-size: clamp(75px, 12vw, 125px);
+ font-weight: 600;
+ letter-spacing: -8px;
+ color: #48443c;
+}
+
+.error-decoration {
+ position: absolute;
+ width: 190px;
+ height: 190px;
+ border: 1px solid #c9c0af;
+ border-radius: 50%;
+ transform: translate(65px, -65px);
+}
+
+.error-details {
+ max-width: 430px;
+}
+
+.error-label {
+ margin-bottom: 18px;
+ color: #8b7860;
+ font-size: 11px;
+ font-weight: 700;
+ letter-spacing: 2px;
+}
+
+.error-details h1 {
+ margin-bottom: 16px;
+ color: #35332e;
+ font-family: "Playfair Display", serif;
+ font-size: clamp(30px, 4vw, 42px);
+ font-weight: 600;
+ line-height: 1.2;
+}
+
+.error-message {
+ color: #777268;
+ font-size: 15px;
+ line-height: 1.8;
+}
+
+.error-actions {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ gap: 12px;
+ margin-top: 30px;
+}
+
+.error-primary,
+.error-secondary {
+ min-height: 44px;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ padding: 0 20px;
+ border-radius: 4px;
+ font-family: inherit;
+ font-size: 13px;
+ font-weight: 600;
+ text-decoration: none;
+ cursor: pointer;
+ transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.error-primary {
+ background: #48443c;
+ color: #fff;
+ border: 1px solid #48443c;
+}
+
+.error-primary:hover {
+ background: #625c50;
+ border-color: #625c50;
+}
+
+.error-secondary {
+ background: transparent;
+ color: #48443c;
+ border: 1px solid #c9c2b7;
+}
+
+.error-secondary:hover {
+ background: #eee9df;
+ border-color: #a99f90;
+}
+
+.error-debug {
+ margin-top: 35px;
+ padding-top: 18px;
+ border-top: 1px solid #ded9cf;
+}
+
+.error-debug summary {
+ color: #777268;
+ font-size: 12px;
+ cursor: pointer;
+}
+
+.error-debug pre {
+ max-height: 250px;
+ overflow: auto;
+ margin-top: 14px;
+ padding: 14px;
+ background: #eee9df;
+ color: #625c50;
+ border-radius: 4px;
+ font-size: 11px;
+ line-height: 1.6;
+ white-space: pre-wrap;
+ overflow-wrap: anywhere;
+}
+
+@media (max-width: 650px) {
+ .error-page {
+  padding: 45px 20px;
+ }
+
+ .error-content {
+  grid-template-columns: 1fr;
+  gap: 35px;
+ }
+
+ .error-illustration {
+  min-height: 190px;
+ }
+
+ .error-code {
+  font-size: 90px;
+ }
+
+ .error-details {
+  max-width: none;
+ }
+}

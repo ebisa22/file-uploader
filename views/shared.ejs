@@ -1,3 +1,4 @@
+ 
 <!DOCTYPE html>
 <html lang="en">
   <%- include('./partials/head', { title: 'Shared Folders', cssPath: 'shared.css' }) %>
@@ -5,126 +6,176 @@
     <%- include('./partials/navbar', { user }) %>
 
     <main class="shared-page">
-      <div class="shared-container">
-        <div class="page-heading">
-          <div>
-            <span class="eyebrow">SHARING MANAGEMENT</span>
-            <h1>Shared folders</h1>
-            <p>Manage the folders you've made accessible through sharing links.</p>
-          </div>
+      <header class="shared-header">
+        <div>
+          <p class="eyebrow">SHARING</p>
+          <h1>Shared folders</h1>
+          <p>Manage the folders you've shared with others.</p>
+        </div>
+      </header>
 
-          <a href="/folders" class="back-button">
-            <i data-lucide="folder"></i>
-            My files
-          </a>
+      <% if (shareError) { %>
+        <div class="shared-alert">
+          <%= shareError %>
+        </div>
+      <% } %>
+
+      <section class="create-share-card">
+        <div class="section-heading">
+          <div>
+            <h2>Create a share link</h2>
+            <p>Choose a folder and decide when its link should expire.</p>
+          </div>
         </div>
 
-        <section class="sharing-summary">
-          <div class="summary-icon">
-            <i data-lucide="share-2"></i>
-          </div>
+        <% if (folders.length === 0) { %>
+          <p class="empty-hint">
+            You don't have any folders to share yet.
+            <a href="/folders">Create a folder</a> first.
+          </p>
+        <% } else { %>
+          <form action="/shared" method="POST" class="share-form">
+            <div class="form-group">
+              <label for="folderId">Folder</label>
+              <select name="folderId" id="folderId" required>
+                <option value="">Choose a folder</option>
+                <% folders.forEach(folder => { %>
+                  <option
+                    value="<%= folder.id %>"
+                    <%= formValues?.folderId == folder.id ? 'selected' : '' %>
+                  >
+                    <%= folder.path %>
+                  </option>
+                <% }) %>
+              </select>
+              <% if (formErrors?.folderId) { %>
+                <small class="field-error"><%= formErrors.folderId.msg %></small>
+              <% } %>
+            </div>
+
+            <div class="form-group">
+              <label for="expiresAt">Expiration date</label>
+              <input
+                type="datetime-local"
+                name="expiresAt"
+                id="expiresAt"
+                value="<%= formValues?.expiresAt || '' %>"
+                required
+              >
+              <% if (formErrors?.expiresAt) { %>
+                <small class="field-error"><%= formErrors.expiresAt.msg %></small>
+              <% } %>
+            </div>
+
+            <button type="submit" class="create-share-button">
+              <i data-lucide="link"></i>
+              Create share link
+            </button>
+          </form>
+        <% } %>
+      </section>
+
+      <section class="shares-section">
+        <div class="section-heading">
           <div>
-            <span>Total shared folders</span>
-            <strong><%= sharedFolderCount %></strong>
+            <h2>Your share links</h2>
+            <p>Links you've created for your folders.</p>
           </div>
-        </section>
+          <span class="share-count"><%= sharedFolders.length %> links</span>
+        </div>
 
-        <section class="shared-section">
-          <div class="section-heading">
-            <div>
-              <h2>Your sharing links</h2>
-              <p>Review and manage your existing shared folders.</p>
+        <% if (sharedFolders.length === 0) { %>
+          <div class="empty-shares">
+            <div class="empty-icon">
+              <i data-lucide="link"></i>
             </div>
-            <span class="share-total"><%= sharedFolders.length %> links</span>
+            <h3>No shared folders yet</h3>
+            <p>When you create a share link, it will appear here.</p>
           </div>
+        <% } else { %>
+          <div class="shares-list">
+            <% sharedFolders.forEach(share => { %>
+              <%
+                const isRevoked = share.revokedAt !== null;
+                const isExpired = new Date(share.expiresAt) <= new Date();
+                const status = isRevoked ? 'Revoked' : isExpired ? 'Expired' : 'Active';
+              %>
 
-          <% if (sharedFolders.length === 0) { %>
-            <div class="empty-state">
-              <div class="empty-icon">
-                <i data-lucide="share"></i>
-              </div>
-              <h3>No shared folders yet</h3>
-              <p>When you share a folder, its sharing link will appear here.</p>
-              <a href="/folders" class="back-button">
-                Browse my folders
-              </a>
-            </div>
-          <% } else { %>
-            <div class="shared-list">
-              <% sharedFolders.forEach(shared => { %>
-                <article class="shared-card">
-                  <div class="shared-card-main">
-                    <div class="shared-folder-icon">
-                      <i data-lucide="folder"></i>
-                    </div>
-
-                    <div class="shared-info">
-                      <h3><%= shared.folder.name %></h3>
-                      <span class="share-date">
-                        Shared on <%= shared.formattedDate %>
-                      </span>
-                    </div>
+              <article class="share-card">
+                <div class="share-main">
+                  <div class="share-icon">
+                    <i data-lucide="folder"></i>
                   </div>
 
-                  <div class="shared-details">
-                    <div class="detail-item">
-                      <span>Expiration</span>
-                      <strong><%= shared.formattedExpiry %></strong>
-                    </div>
+                  <div class="share-info">
+                    <h3><%= share.folder.name %></h3>
+                    <p>Created <%= share.formattedDate %></p>
+                  </div>
+                </div>
 
-                    <div class="detail-item">
-                      <span>Status</span>
-                      <span class="status <%= shared.status %>">
-                        <%= shared.status %>
-                      </span>
-                    </div>
+                <div class="share-details">
+                  <div class="share-expiration">
+                    <span>Expires</span>
+                    <strong><%= share.formattedExpiry %></strong>
                   </div>
 
-                  <div class="shared-actions">
-                    <% if (shared.status === 'active') { %>
-                      <button
-                        type="button"
-                        class="copy-button"
-                        data-copy-link="<%= shared.shareUrl %>"
-                      >
-                        <i data-lucide="copy"></i>
-                        Copy link
+                  <span class="share-status <%= status.toLowerCase() %>">
+                    <%= status %>
+                  </span>
+                </div>
+
+                <div class="share-actions">
+                  <% if (status === 'Active') { %>
+                    <a
+                      href="/share/<%= share.token %>"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="open-share-button"
+                    >
+                      <i data-lucide="external-link"></i>
+                      Open
+                    </a>
+
+                    <button
+                      type="button"
+                      class="copy-share-button"
+                      data-share-url="/share/<%= share.token %>"
+                    >
+                      <i data-lucide="copy"></i>
+                      Copy link
+                    </button>
+
+                    <form action="/shared/<%= share.id %>/revoke" method="POST">
+                      <button type="submit" class="revoke-button">
+                        <i data-lucide="x-circle"></i>
+                        Revoke
                       </button>
-
-                      <form action="/shared/<%= shared.id %>/revoke" method="POST">
-                        <button type="submit" class="revoke-button">
-                          <i data-lucide="x-circle"></i>
-                          Revoke
-                        </button>
-                      </form>
-                    <% } %>
-                  </div>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </section>
-      </div>
+                    </form>
+                  <% } %>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </section>
     </main>
 
-    <%- include('./partials/footer') %>
-
     <script>
-      lucide.createIcons();
-
-      document.querySelectorAll('[data-copy-link]').forEach(button => {
+      document.querySelectorAll('.copy-share-button').forEach(button => {
         button.addEventListener('click', async () => {
-          const link = button.dataset.copyLink;
+          const url = new URL(button.dataset.shareUrl, window.location.origin).href;
 
           try {
-            await navigator.clipboard.writeText(link);
+            await navigator.clipboard.writeText(url);
             button.innerHTML = '<i data-lucide="check"></i> Copied';
             lucide.createIcons();
-          } catch (error) {
-            console.error('Could not copy sharing link:', error);
+          } catch (err) {
+            console.error(err);
           }
         });
       });
+
+      lucide.createIcons();
     </script>
   </body>
 </html>

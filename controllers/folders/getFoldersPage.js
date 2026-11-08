@@ -23,11 +23,20 @@ const getFoldersPage = async (req, res, next) => {
     });
 
     const folderCount = folders.length;
-
+    const files = await prisma.file.findMany({
+      where: {
+        userId: user.id,
+        folderId: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
     res.render("folders", {
       user,
       folders,
       folderCount,
+      files
     });
   } catch (err) {
     console.error(err);

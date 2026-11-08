@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head', { title, cssPath: 'errors.css' }) %>
+  <body>
+    <%- include('./partials/navbar', { user }) %>
+
+    <main class="error-page">
+      <section class="error-content">
+        <div class="error-illustration">
+          <span class="error-code"><%= statusCode %></span>
+          <div class="error-decoration"></div>
+        </div>
+
+        <div class="error-details">
+          <p class="error-label">VAULT / SYSTEM NOTICE</p>
+
+          <h1><%= heading %></h1>
+
+          <p class="error-message"><%= message %></p>
+
+          <div class="error-actions">
+            <a href="/dashboard" class="error-primary">
+              Back to Dashboard
+            </a>
+
+            <button
+              type="button"
+              class="error-secondary"
+              onclick="history.back()"
+            >
+              Go Back
+            </button>
+          </div>
+
+          <% if (error && error.stack) { %>
+            <details class="error-debug">
+              <summary>Technical details</summary>
+              <pre><%= error.stack %></pre>
+            </details>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <%- include('./partials/footer') %>
+  </body>
+</html>
