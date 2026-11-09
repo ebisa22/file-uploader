@@ -6,7 +6,8 @@ const renameFile=async(req,res,next)=>{
  try{
   const file=await prisma.file.update({
    where:{
-    id:fileId
+    id:fileId,
+    userId: req.user.id,
    },
    data:{
     originalName:fileName

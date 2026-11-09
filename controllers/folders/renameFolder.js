@@ -13,6 +13,7 @@ const renameFolder=async(req,res,next)=>{
      await prisma.folder.update({
       where:{
        id:folderId,
+       userId: req.user.id,
       },
       data:{
        name:folderName

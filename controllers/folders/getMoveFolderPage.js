@@ -18,11 +18,12 @@ const getFolderPath = (folder, folders) => {
 const getMoveFolderPage=async(req,res)=>{
      const user=req.user;
      const folderId=Number(req.params.folderId);
-     const folder=await prisma.folder.findUnique({
-      where:{
-       id:folderId
-      }
-     })
+     const folder = await prisma.folder.findUnique({
+       where: {
+         id: folderId,
+         userId:user.id,
+       },
+     });
      const folders=await prisma.folder.findMany();
      const destinationFolders = folders
        .filter((item) => item.id !== folder.id)
